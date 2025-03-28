@@ -1,9 +1,5 @@
 /* Login Page Specific Styles */
 body.login-page {
-  background-image: url('https://images.unsplash.com/photo-1618220179428-22790b461013?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
   height: 100vh;
   margin: 0;
   display: flex;
@@ -12,17 +8,7 @@ body.login-page {
   font-family: 'Arial', sans-serif;
 }
 
-/* Login container with fade-in animation */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+
 
 .login-page .login-container {
   width: 100%;
@@ -36,11 +22,7 @@ body.login-page {
   animation: fadeInUp 0.6s ease-in-out;
 }
 
-/* Adding hover effect */
-.login-page .login-container:hover {
-  transform: scale(1.03);
-  box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.3);
-}
+
 
 /* Input fields with glowing effect */
 .login-page .login-container input {
@@ -76,23 +58,10 @@ body.login-page {
   transition: background 0.3s ease, transform 0.2s ease;
 }
 
-/* Button hover effect */
-.login-page .login-container button:hover {
-  background: linear-gradient(135deg, #005ecb, #0094d9);
-  transform: translateY(-3px);
-}
 
-/* Button active effect */
-.login-page .login-container button:active {
-  transform: translateY(1px);
-}
 
-/* Icon above login form */
-.login-page .login-container .icon {
-  font-size: 40px;
-  margin-bottom: 20px;
-  color: #0072ff;
-}
+
+
 
 /* Adjust text alignment */
 .login-page .login-container h2 {
