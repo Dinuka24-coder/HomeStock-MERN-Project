@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import Swal from "sweetalert2";
 import "./../styles/login.css";
 import { FaLock } from "react-icons/fa"; // Optional icon
 
@@ -30,30 +29,14 @@ function Login() {
 
       const data = await response.json();
       if (response.ok) {
-        Swal.fire({
-          title: "Welcome!",
-          text: "Login successful!",
-          icon: "success",
-          confirmButtonText: "OK",
-        }).then(() => {
-          localStorage.setItem("userToken", data.token);
-          navigate("/home");
-        });
+        alert("Login successful!");
+        localStorage.setItem("userToken", data.token);
+        navigate("/home");
       } else {
-        Swal.fire({
-          title: "Error!",
-          text: data.message,
-          icon: "error",
-          confirmButtonText: "OK",
-        });
+        alert(data.message);
       }
     } catch (error) {
-      Swal.fire({
-        title: "Error!",
-        text: "Something went wrong. Please try again.",
-        icon: "error",
-        confirmButtonText: "OK",
-      });
+      alert("Something went wrong. Please try again.");
     }
   };
 
@@ -70,7 +53,7 @@ function Login() {
   return (
     <div className="login-container">
       <div className="icon">
-        <FaLock /> {/* Using Font Awesome lock icon */}
+        <FaLock />
       </div>
       <h2>Login</h2>
       <form onSubmit={handleLogin}>

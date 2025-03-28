@@ -15,6 +15,8 @@ router.post("/login", loginUser);
 // Get all users (protected route)
 router.get("/", protect, getUsers);
 
+
+
 // Delete a user (protected route)
 router.delete("/:id", protect, deleteUser);
 

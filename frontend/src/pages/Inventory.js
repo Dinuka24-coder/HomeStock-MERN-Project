@@ -1,10 +1,7 @@
 import Layout from "../components/Layout";
 import { useEffect, useState } from "react";
 import "../styles/inventory.css"; // New CSS file for styles
-import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
-import jsPDF from "jspdf"; // Import jsPDF for PDF generation
-import "jspdf-autotable"; // Import jspdf-autotable for table support
 
 function Inventory() {
   const [items, setItems] = useState([]);
@@ -40,21 +37,10 @@ function Inventory() {
       if (response.ok) {
         setItems(data);
       } else {
-        Swal.fire({
-          title: "Error!",
-          text: data.message,
-          icon: "error",
-          confirmButtonText: "OK",
-        });
+        console.error("Error fetching inventory:", data.message);
       }
     } catch (error) {
       console.error("Error fetching inventory:", error);
-      Swal.fire({
-        title: "Error!",
-        text: "An error occurred while fetching inventory. Please try again.",
-        icon: "error",
-        confirmButtonText: "OK",
-      });
     } finally {
       setLoading(false);
     }
@@ -64,30 +50,17 @@ function Inventory() {
     e.preventDefault();
     const token = localStorage.getItem("userToken");
 
-    // Check for empty fields
     if (!newItem.itemName || !newItem.quantity || !newItem.category || !newItem.price) {
-      Swal.fire({
-        title: "Error!",
-        text: "Please fill in all required fields.",
-        icon: "error",
-        confirmButtonText: "OK",
-      });
+      console.error("Please fill in all required fields.");
       return;
     }
 
-    // Validate quantity and price
     if (newItem.quantity < 0 || newItem.price < 0) {
-      Swal.fire({
-        title: "Error!",
-        text: "Quantity and price must be non-negative numbers.",
-        icon: "error",
-        confirmButtonText: "OK",
-      });
+      console.error("Quantity and price must be non-negative numbers.");
       return;
     }
 
     if (editItem) {
-      // Update existing item
       try {
         const response = await fetch(`http://localhost:3000/api/inventory/update/${editItem._id}`, {
           method: "PUT",
@@ -100,33 +73,15 @@ function Inventory() {
 
         const data = await response.json();
         if (response.ok) {
-          Swal.fire({
-            title: "Success!",
-            text: "Item updated successfully!",
-            icon: "success",
-            confirmButtonText: "OK",
-          });
           setItems(items.map(item => (item._id === editItem._id ? data.item : item)));
           setEditItem(null);
         } else {
-          Swal.fire({
-            title: "Error!",
-            text: data.message,
-            icon: "error",
-            confirmButtonText: "OK",
-          });
+          console.error("Error updating item:", data.message);
         }
       } catch (error) {
         console.error("Error updating item:", error);
-        Swal.fire({
-          title: "Error!",
-          text: "An error occurred while updating the item. Please try again.",
-          icon: "error",
-          confirmButtonText: "OK",
-        });
       }
     } else {
-      // Add new item
       try {
         const response = await fetch("http://localhost:3000/api/inventory/add", {
           method: "POST",
@@ -139,33 +94,15 @@ function Inventory() {
 
         const data = await response.json();
         if (response.ok) {
-          Swal.fire({
-            title: "Success!",
-            text: "Item added successfully!",
-            icon: "success",
-            confirmButtonText: "OK",
-          });
           setItems([...items, data.newItem]);
         } else {
-          Swal.fire({
-            title: "Error!",
-            text: data.message,
-            icon: "error",
-            confirmButtonText: "OK",
-          });
+          console.error("Error adding item:", data.message);
         }
       } catch (error) {
         console.error("Error adding item:", error);
-        Swal.fire({
-          title: "Error!",
-          text: "An error occurred while adding the item. Please try again.",
-          icon: "error",
-          confirmButtonText: "OK",
-        });
       }
     }
 
-    // Reset form
     setNewItem({ itemName: "", quantity: "", category: "", expiryDate: "", price: "" });
   };
 
@@ -183,58 +120,9 @@ function Inventory() {
   const handleDeleteItem = async (itemId) => {
     const token = localStorage.getItem("userToken");
 
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to undo this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, delete it!",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          const response = await fetch(`http://localhost:3000/api/inventory/delete/${itemId}`, {
-            method: "DELETE",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          });
-
-          const data = await response.json();
-          if (response.ok) {
-            Swal.fire("Deleted!", "The item has been deleted.", "success");
-            setItems(items.filter((item) => item._id !== itemId));
-          } else {
-            Swal.fire("Error!", data.message, "error");
-          }
-        } catch (error) {
-          console.error("Error deleting item:", error);
-          Swal.fire("Error!", "Something went wrong!", "error");
-        }
-      }
-    });
-  };
-
-  const handleConsumeItem = async (itemId) => {
-    const token = localStorage.getItem("userToken");
-    const itemToConsume = items.find((item) => item._id === itemId);
-
-    // Check if the item has a quantity greater than 0
-    if (itemToConsume.quantity <= 0) {
-      Swal.fire({
-        title: "Error!",
-        text: "This item is out of stock.",
-        icon: "error",
-        confirmButtonText: "OK",
-      });
-      return;
-    }
-
     try {
-      const response = await fetch(`http://localhost:3000/api/inventory/consume/${itemId}`, {
-        method: "PUT",
+      const response = await fetch(`http://localhost:3000/api/inventory/delete/${itemId}`, {
+        method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -243,61 +131,13 @@ function Inventory() {
 
       const data = await response.json();
       if (response.ok) {
-        Swal.fire({
-          title: "Item Consumed!",
-          text: "The item quantity has been reduced.",
-          icon: "success",
-          confirmButtonText: "OK",
-        });
-        setItems(items.map((item) => (item._id === itemId ? { ...item, quantity: item.quantity - 1 } : item)));
+        setItems(items.filter((item) => item._id !== itemId));
       } else {
-        Swal.fire({
-          title: "Error!",
-          text: data.message,
-          icon: "error",
-          confirmButtonText: "OK",
-        });
+        console.error("Error deleting item:", data.message);
       }
     } catch (error) {
-      console.error("Error consuming item:", error);
-      Swal.fire({
-        title: "Error!",
-        text: "An error occurred while consuming the item. Please try again.",
-        icon: "error",
-        confirmButtonText: "OK",
-      });
+      console.error("Error deleting item:", error);
     }
-  };
-
-  // Function to generate and download a PDF report
-  const generatePDFReport = () => {
-    const doc = new jsPDF();
-
-    // Add title
-    doc.setFontSize(18);
-    doc.text("Inventory Report", 10, 10);
-
-    // Define table columns
-    const columns = ["Item Name", "Quantity", "Category", "Expiry Date", "Price"];
-
-    // Map inventory data to rows
-    const rows = items.map((item) => [
-      item.itemName,
-      item.quantity,
-      item.category,
-      item.expiryDate ? new Date(item.expiryDate).toLocaleDateString() : "N/A",
-      `R.S ${item.price}`,
-    ]);
-
-    // Add table to PDF
-    doc.autoTable({
-      head: [columns],
-      body: rows,
-      startY: 20, // Start table below the title
-    });
-
-    // Save the PDF
-    doc.save("inventory_report.pdf");
   };
 
   return (
@@ -312,7 +152,6 @@ function Inventory() {
           <input type="date" placeholder="Expiry Date" value={newItem.expiryDate} onChange={(e) => setNewItem({ ...newItem, expiryDate: e.target.value })} />
           <input type="number" placeholder="Price" required min="0" value={newItem.price} onChange={(e) => setNewItem({ ...newItem, price: e.target.value })} />
           <button type="submit">{editItem ? "Update Item" : "Add Item"}</button>
-          <button type="button" onClick={generatePDFReport} className="generate-report-btn">Generate Report</button>
         </form>
 
         {loading ? (
@@ -328,9 +167,7 @@ function Inventory() {
                 <p><strong>Price:</strong> R.S {item.price}</p>
                 <div className="inventory-buttons">
                   <button className="edit-btn" onClick={() => handleEditItem(item)}>Edit</button>
-                  <button className="consume-btn" onClick={() => handleConsumeItem(item._id)}>Consume</button>
                   <button className="delete-btn" onClick={() => handleDeleteItem(item._id)}>Delete</button>
-                  
                 </div>
               </div>
             ))}

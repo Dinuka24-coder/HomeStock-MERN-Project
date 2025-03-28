@@ -1,9 +1,6 @@
 /* Apply styles only when inside .register-page */
 .register-page {
-  background-image: url('https://images.unsplash.com/photo-1501183638710-841dd1904471?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  
   height: 100vh;
   display: flex;
   justify-content: center;
@@ -12,12 +9,7 @@
   font-family: 'Poppins', sans-serif;
 }
 
-/* Register Page Icon */
-.register-icon {
-  font-size: 40px;
-  color: #007bff;
-  margin-bottom: 10px;
-}
+
 
 
 /* Centered register container */
@@ -51,12 +43,6 @@
   transition: all 0.3s ease-in-out;
 }
 
-/* Input focus effect */
-.register-container input:focus {
-  border-color: #007bff;
-  outline: none;
-  box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
-}
 
 /* Register button */
 .register-container button {
@@ -72,16 +58,7 @@
   transition: background 0.3s ease-in-out, transform 0.2s ease;
 }
 
-/* Button hover effect */
-.register-container button:hover {
-  background: linear-gradient(135deg, #0056d2, #0041a3);
-  transform: scale(1.05);
-}
 
-/* Button click effect */
-.register-container button:active {
-  transform: scale(0.98);
-}
 
 /* Already have an account? */
 .register-container p {
@@ -100,14 +77,4 @@
   text-decoration: underline;
 }
 
-/* Smooth fade-in animation */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+

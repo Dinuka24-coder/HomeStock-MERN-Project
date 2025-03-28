@@ -1,6 +1,6 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
-import useSpeechRecognition from "../hooks/useSpeechRecognition"; // Import speech hook
+import useSpeechRecognition from "../hooks/useSpeechRecognition"; 
 import "./../styles/header.css";
 
 function Header() {
@@ -12,18 +12,18 @@ function Header() {
   const logoutTimerRef = useRef(null);
   const [isAdmin, setIsAdmin] = useState(false);
 
-  // ✅ Function to handle voice commands
+  
   const handleVoiceCommand = (command) => {
     command = command.toLowerCase();
 
-    // 🔹 Page Navigation
+    
     if (command.includes("home")) navigate("/home");
     if (command.includes("inventory")) navigate("/inventory");
     if (command.includes("expenses")) navigate("/expenses");
     if (command.includes("dashboard")) navigate("/dashboard");
     if (command.includes("admin panel")) navigate("/admin-dashboard");
 
-    // 🔹 Logout Command
+    
     if (command.includes("logout")) {
       localStorage.removeItem("userToken");
       navigate("/");
@@ -234,13 +234,9 @@ function Header() {
           <li><Link to="/expenses">Expenses</Link></li>
           {isAdmin && <li><Link to="/admin-dashboard">Admin Panel</Link></li>}
           <li className="profile-container" onMouseEnter={openDropdown} onMouseLeave={closeDropdown}>
-            <img src={user.profilePic ? `http://localhost:3000/uploads/${user.profilePic}` : "https://via.placeholder.com/40"} alt="Profile" className="profile-icon" />
-            {dropdownOpen && (
-              <div className="dropdown-menu">
-                <Link to="/dashboard">Edit Profile</Link>
-                <button onClick={handleLogout}>Logout</button>
-              </div>
-            )}
+            
+          
+            
           </li>
           <li>
             <button className={`mic-button ${isListening ? "listening" : ""}`} onClick={() => setIsListening(!isListening)}>

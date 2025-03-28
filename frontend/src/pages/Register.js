@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; // Import useNavigate for redirection
-import Swal from "sweetalert2"; // Import SweetAlert2
 import { FaUserPlus } from "react-icons/fa"; // Import user icon
 import "./../styles/register.css";
 
@@ -20,12 +19,7 @@ function Register() {
   const handleRegister = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      Swal.fire({
-        title: "Error!",
-        text: "Passwords do not match!",
-        icon: "error",
-        confirmButtonText: "OK",
-      });
+      alert("Error: Passwords do not match!");
       return;
     }
 
@@ -42,36 +36,20 @@ function Register() {
 
       const data = await response.json();
       if (response.ok) {
-        Swal.fire({
-          title: "Success!",
-          text: "Registration successful! You can now log in.",
-          icon: "success",
-          confirmButtonText: "OK",
-        }).then(() => {
-          navigate("/"); // Redirect to login page
-        });
+        alert("Success: Registration successful! You can now log in.");
+        navigate("/"); // Redirect to login page
       } else {
-        Swal.fire({
-          title: "Error!",
-          text: data.message,
-          icon: "error",
-          confirmButtonText: "OK",
-        });
+        alert(`Error: ${data.message}`);
       }
     } catch (error) {
-      Swal.fire({
-        title: "Error!",
-        text: "Something went wrong. Please try again.",
-        icon: "error",
-        confirmButtonText: "OK",
-      });
+      alert("Error: Something went wrong. Please try again.");
     }
   };
 
   return (
     <div className="register-page">
       <div className="register-container">
-        <FaUserPlus className="register-icon" /> {/* User Icon */}
+        <FaUserPlus className="register-icon" /> {/* Register icon*/}
         <h2>Register</h2>
         <form onSubmit={handleRegister}>
           <input type="text" name="fullName" placeholder="Full Name" onChange={handleChange} required />
